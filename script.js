@@ -26,7 +26,7 @@ const drawBox = document.getElementById("draw") ?? (()=>{throw new Error("HTMLEl
 
 
 /**
- *  {1|-1} markNumType 記号を表す数値型
+ * @typedef {1|-1} markNumType 記号を表す数値型
  * @typedef {markNumType|0} cellType 盤面の1マスの状態を表す数値型
  * @typedef {[cellType,cellType,cellType]} rowType 盤面の行を表す配列型
  * @typedef {[rowType,rowType,rowType]} tableType 盤面全体を表す2次元配列型
@@ -108,7 +108,7 @@ function getStates(){
         }
     }
     let count_circle=0,count_cross=0,count_draw;
-    let judge;
+    /** @type {markNumType|undefined} */let judge;
     for(let x=0;x<3;x++){//横
         //count_circle=0;
         for(let y=0;y<3;y++){
@@ -192,12 +192,6 @@ function getStates(){
         }
     }
     return[game_finish,count_draw ,judge]
-    /*
-    この関数を編集
-    注：以下のreturn文は例です。そのままでは不正解です。
-    */
-    //return [true,true,-1];
-    
 }
 
 /**
