@@ -181,20 +181,22 @@ count_cross=0;
             winner= -1;
         }
     }
-
-    for(let x=0;x<3;x++){//マスがすべて埋まっているか調べる。
-        for(let y=0;y<3;y++){
-            if(tableArrs[x][y]==0){
-                game_finish = false; break;
-            }
-            else if(tableArrs[x][y]==-1 || tableArrs[x][y]==1){
-                game_finish = true;
-                judge=false;
+    function judgeFull(){//引き分けか調べる
+        for(let x=0;x<3;x++){
+            for(let y=0;y<3;y++){
+                if(tableArrs[x][y]==0){
+                    return false;
+                }
             }
         }
+        return true;
+    }
+    if(judgeFull()){
+        game_finish=true;
+        judge=false;
     }
 
-　　return[game_finish,judge,winner];
+    return[game_finish,judge,winner];
 }
 
 /**
