@@ -181,7 +181,7 @@ count_cross=0;
             winner= -1;
         }
     }
-    function judgeFull(){//引き分けか調べる
+    function judgeDrrow(){//引き分けか調べる
         for(let x=0;x<3;x++){
             for(let y=0;y<3;y++){
                 if(tableArrs[x][y]==0){
@@ -191,7 +191,7 @@ count_cross=0;
         }
         return true;
     }
-    if(judgeFull()){
+    if(judgeDrrow()){
         game_finish=true;
         judge=false;
     }
