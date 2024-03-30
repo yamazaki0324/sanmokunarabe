@@ -89,71 +89,61 @@ function updateStates(rowIndex,columnIndex){
 }
 
 /**
- * 盤面の状態から、ゲーム終了であるか、勝敗が決まったか、勝者はいずれか、を過不足なく返す関数。
+ * 盤面の状態から、ゲーム終了(gamefinish)であるか、勝敗(judge)が決まったか、勝者(winner)はいずれか、を過不足なく返す関数。
  * 戻り値はその3つの値を順に格納する配列。
  * ゲーム終了でなければ、以降2つの配列の要素は「undefined」とする。
  * ゲーム終了であるが、勝敗が決まらなかった場合は、3つ目の要素は「undefined」とする。
  * @returns {[false,undefined,undefined]|[true,false,undefined]|[true,true,markNumType]}
  */
 function getStates(){
-    let game_finish=Boolean();
-    for(let x=0;x<3;x++){
-        for(let y=0;y<3;y++){
-            if(tableArrs[x][y]==0){
-                game_finish = false; break;
+    let game_finish=false;
+    let count_circle=0,count_cross=0,judge;
+      /** @type {markNumType|undefined} */let winner;
+   
+      for(let x=0;x<3;x++){//横に並んでるかを調べる
+        count_circle=0;
+        count_cross=0;
+         for(let y=0;y<3;y++){
+            if(tableArrs[x][y]==-1){
+                count_cross++;
+            }else if(tableArrs[x][y]==1){
+                count_circle++;
             }
-            else if(tableArrs[x][y]==-1 || tableArrs[x][y]==1){
-                game_finish = true;
+            if(count_cross==3){
+                game_finish=true;
+                judge=true;
+                winner=-1;
+            }else if(count_circle==3){
+                game_finish=true;
+                judge=true;
+                winner=1
             }
-        }
-    }
-    let count_circle=0,count_cross=0,count_draw;
-    /** @type {markNumType|undefined} */let judge;
-    for(let x=0;x<3;x++){//横
-        //count_circle=0;
-        for(let y=0;y<3;y++){
-           if(tableArrs[x][y]==1){
-              count_circle++;
-           }
-           else if(tableArrs[x][y]==-1){
-            count_cross++;
-           }
-        }
-        if(count_circle==3){
-            count_draw=true;
-            judge= 1;
-        }
-        else if(count_cross==3){
-            count_draw=true;
-            judge= -1;
-        }
-        else{
-            count_draw=false;
-        }
-    }
-    for(let y=0;y<3;y++){//縦
-        //count_circle=0;
-        for(let x=0;x<3;x++){
-           if(tableArrs[x][y]==1){
-              count_circle++;
-           }
-           else if(tableArrs[x][y]==-1){
-            count_cross++;
-           }
-        }
-        if(count_circle==3){
-            count_draw=true;
-            judge= 1;
-        }
-        else if(count_cross==3){
-            count_draw=true;
-            judge= -1;
-        }
-        else{
-            count_draw=false;
-        }
-    }
-    for(let k=0;k<3;k++){//右下斜め
+         }
+      }
+      
+      for(let x=0;x<3;x++){//縦に並んでるかを調べる
+        count_circle=0;
+        count_cross=0;
+         for(let y=0;y<3;y++){
+            if(tableArrs[y][x]==-1){
+                count_cross++;
+            }else if(tableArrs[y][x]==1){
+                count_circle++;
+            }
+            if(count_cross==3){
+                game_finish=true;
+                judge=true;
+                winner=-1;
+            }else if(count_circle==3){
+                game_finish=true;
+                judge=true;
+                winner=1
+            }
+         }
+      }
+      count_circle=0;
+      count_cross=0;
+      for(let k=0;k<3;k++){//右斜めに並んでるか調べる
         if(tableArrs[k][k]==1){
             count_circle++;
          }
@@ -161,37 +151,50 @@ function getStates(){
           count_cross++;
          }
          if(count_circle==3){
-            count_draw=true;
-            judge= 1;
+            game_finish=true;
+            judge=true;
+            winner= 1;
         }
         else if(count_cross==3){
-            count_draw=true;
-            judge= -1;
-        }
-        else{
-            count_draw=false;
+            game_finish=true;
+            judge=true;
+            winner= -1;
         }
     }
-    for(let k=0;k<3;k++){//左下斜め
-        if(tableArrs[3-1-k][3-1-k]==1){
+count_circle=0;
+count_cross=0;
+    for(let k=0;k<3;k++){//左斜めに並んでるか調べる
+        if(tableArrs[k][3-1-k]==1){
             count_circle++;
          }
-         else if(tableArrs[3-1-k][3-1-k]==-1){
+         else if(tableArrs[k][3-1-k]==-1){
           count_cross++;
          }
          if(count_circle==3){
-            count_draw=true;
-            judge= 1;
+            game_finish=true;
+            judge=true;
+            winner= 1;
         }
         else if(count_cross==3){
-            count_draw=true;
-            judge= -1;
-        }
-        else{
-            count_draw=false;
+            game_finish=true;
+            judge=true;
+            winner= -1;
         }
     }
-    return[game_finish,count_draw ,judge]
+
+    for(let x=0;x<3;x++){//マスがすべて埋まっているか調べる。
+        for(let y=0;y<3;y++){
+            if(tableArrs[x][y]==0){
+                game_finish = false; break;
+            }
+            else if(tableArrs[x][y]==-1 || tableArrs[x][y]==1){
+                game_finish = true;
+                judge=false;
+            }
+        }
+    }
+
+　　return[game_finish,judge,winner];
 }
 
 /**
